@@ -8,7 +8,7 @@ utilizzare modelli linguistici basati su transformer per analizzare le cartelle 
 - **[ner theory]** estrarre informazioni strutturate da testi liberi (anamnesi, diagnosi, ecc.) 
 - **[disease analysis]** analizzare, mappare o prevedere lo sviluppo di malattie
 - **[llm fine-tuning]** valutare l'impiego di modelli di linguaggio per supportare la generazione automatica di diagnosi o altro
-- **[webapp developing]** costruire una piattaforma open source dedicata a tali scopi
+- **[webapp developing]** costruire una piattaforma dedicata a tali scopi (*)
 
 ## 2. state of the art analysis
 
@@ -79,6 +79,8 @@ utilizzare modelli linguistici basati su transformer per analizzare le cartelle 
 - sviluppo e approfondimento di moduli per named entity recognition clinica
 - collaborazione con pediatri per validazione qualitativa e clinica dei risultati
 - integrazione con strumenti di supporto alla decisione clinica
+
+(*) obiettivi che possono esulare gli obiettivi primari della tesi
 
 
 ---
