@@ -1,102 +1,87 @@
-# Wikipedia Graph + Transformer Analysis (Italiano)
+# roadmap tesi  
+**applicazione di modelli transformer all'analisi delle cartelle cliniche pediatriche della rete pedianet**
 
-Questo progetto ha l'obiettivo di costruire un grafo orientato delle pagine di Wikipedia in italiano, utilizzando i dump ufficiali rilasciati da Wikimedia. In seguito, si intende applicare un modello Transformer sul contenuto testuale di ciascuna pagina per condurre analisi avanzate.
+## 1. obiettivi tesi
 
-## Contenuti
+utilizzare modelli linguistici basati su transformer per analizzare le cartelle cliniche pediatriche, con l'obiettivo di:
 
-- Download e parsing dei dump SQL di Wikipedia (itwiki)
-- Importazione in un database MySQL
-- Costruzione di un grafo delle pagine e dei link interni
-- Estrazione e pre-processing dei testi
-- Applicazione di un Transformer a ciascun nodo del grafo (pagina)
-- Analisi e interpretazione dei risultati
+- **[ner theory]** estrarre informazioni strutturate da testi liberi (anamnesi, diagnosi, ecc.) 
+- **[disease analysis]** analizzare, mappare o prevedere lo sviluppo di malattie
+- **[llm fine-tuning]** valutare l'impiego di modelli di linguaggio per supportare la generazione automatica di diagnosi o altro
+- **[webapp developing]** costruire una piattaforma open source dedicata a tali scopi
 
-## Dump utilizzati
+## 2. state of the art analysis
 
-Scaricati da https://dumps.wikimedia.org/itwiki/latest/:
+- rassegna della letteratura scientifica recente sull’utilizzo di llm/transformers in ambito medico
+- focus specifico sull’ambito pediatrico e sull'elaborazione del linguaggio clinico
+- analisi di modelli pre-addestrati rilevanti (es. biobert, clinicalbert, gatortron, med-palm, deepseek, ecc.)
 
-- `itwiki-latest-page.sql.gz`: contiene i metadati delle pagine (nodi del grafo)
-- `itwiki-latest-pagelinks.sql.gz`: contiene i collegamenti tra pagine (archi del grafo)
-- `itwiki-latest-pages-articles.xml.bz2`: contiene il testo completo delle voci
+## 3. raccoglimento e preparazione dei dati
 
-## Setup ambiente
+- studio della struttura delle cartelle cliniche pedianet
+- parsing e pulizia dei dati (preprocessing testuale, gestione dei valori mancanti)
+- tokenizzazione, normalizzazione e anonimizzazione
 
-### 1. Installazione MySQL
+## 4. analisi statistica esplorativa del dataset
 
-```bash
-sudo apt update
-sudo apt install mysql-server
-sudo systemctl start mysql
-```
+- statistiche descrittive (numero pazienti, età, distribuzione diagnosi)
+- frequenze delle condizioni cliniche principali
+- lunghezza media dei testi
+- visualizzazioni (grafici, distribuzioni, wordclouds)
 
-### 2. Creazione del database
+## 5. modellazione con transformer
 
-```sql
-CREATE DATABASE itwiki;
-```
+### 5.1 estrazione e pre-processing dei dati
 
-### 3. Import dei dump
+- sviluppo di script per estrazione da database/file raw
+- output strutturato in formato json
 
-```bash
-gunzip itwiki-latest-page.sql.gz
-gunzip itwiki-latest-pagelinks.sql.gz
+### 5.2 named entity recognition (ner) clinica
 
-mysql -u root -p itwiki < itwiki-latest-page.sql
-mysql -u root -p itwiki < itwiki-latest-pagelinks.sql
-```
+- applicazione di ner per identificare entità mediche (sintomi, farmaci, diagnosi, procedure)
+- supporto all’analisi strutturata del testo clinico
+- potenziale utilizzo come feature nei modelli successivi
 
-## Struttura dati
+### 5.3 classificazione delle anamnesi
 
-- `page`: contiene `page_id`, `page_title`, `page_namespace`
-- `pagelinks`: contiene `pl_from` (ID sorgente) e `pl_title` (titolo destinazione)
+- predizione automatica di categorie di rischio o patologie potenziali
 
-## Roadmap
+### 5.4 classificazione delle diagnosi
 
-### Fase 1: Importazione e costruzione del grafo
-- [x] Scaricamento dei dump
-- [x] Importazione dei dati in MySQL
-- [x] Estrazione dei nodi e archi
-- [ ] Costruzione del grafo con `networkx`
+- raggruppamento e categorizzazione automatica delle diagnosi a partire da dati clinici grezzi
 
-### Fase 2: Estrazione e pre-processing del testo
-- [ ] Parsing di `itwiki-latest-pages-articles.xml.bz2`
-- [ ] Normalizzazione e pulizia del contenuto testuale
+### 5.5 domande esplorative
 
-### Fase 3: Integrazione con modello Transformer
-- [ ] Integrazione di un modello pre-addestrato (es. BERT, DistilBERT)
-- [ ] Generazione delle embedding per ogni nodo del grafo
-- [ ] Salvataggio e gestione delle rappresentazioni
+- quali correlazioni emergono tra anamnesi e diagnosi?
+- è possibile identificare cluster di pazienti con pattern simili?
+- la relazione anamnesi-diagnosi è univoca, biunivoca o ambigua?
+- esistono segnali precoci che anticipano determinate diagnosi?
 
-### Fase 4: Analisi
-- [ ] Analisi di similarità semantica tra nodi
-- [ ] Clustering semantico
-- [ ] Classificazione/annotazione delle pagine
-- [ ] Visualizzazione con embedding 2D (es. t-SNE, UMAP)
+## 6. fine-tuning di un modello linguistico (llm)
 
-## Idee per analisi future
+### 6.1 scelta e preparazione del modello
 
-- Individuare comunità semantiche di pagine (community detection su embedding)
-- Trovare "outlier" semantici: pagine che parlano di argomenti insoliti rispetto ai link
-- Costruire un sistema di raccomandazione tra pagine
-- Valutare la correlazione tra struttura del grafo e similarità semantica del contenuto
-- Usare il grafo come supporto per task NLP supervisionati (es. classificazione, QA)
+- selezione di un llm fondazionale (es. deepseek, med-palm, biogpt)
 
-## Librerie Python usate
+### 6.2 fine-tuning supervisionato
 
-- `mysql-connector-python`
-- `networkx`
-- `pandas`
-- `transformers`
-- `scikit-learn`
-- `matplotlib`
+- addestramento supervisionato su coppie (anamnesi, diagnosi)
+- valutazione delle prestazioni (accuracy, precision, recall, f1-score)
 
-## Licenza
+### 6.3 sviluppo di un prototipo
 
-MIT — libero uso per fini di studio e ricerca.  
-I dati provengono da Wikipedia e sono distribuiti secondo la licenza CC BY-SA 3.0.
+- input: json con anamnesi
+- output: diagnosi possibili con probabilità associate
+- possibile interfaccia ui o api rest per test del sistema
 
-## Contatti
+## 7. estensioni future
 
-tedesco@system-product-name.local  
-GitHub: [inserisci tuo username]
+- sviluppo e approfondimento di moduli per named entity recognition clinica
+- collaborazione con pediatri per validazione qualitativa e clinica dei risultati
+- integrazione con strumenti di supporto alla decisione clinica
+
+
+---
+
+
 
