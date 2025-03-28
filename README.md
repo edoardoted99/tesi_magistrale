@@ -83,6 +83,9 @@ utilizzare modelli linguistici basati su transformer per analizzare le cartelle 
 (*) obiettivi che possono esulare gli obiettivi primari della tesi
 
 
+### altre idee:
+- addestarre un llm a fare query sql e visulization così da facilitare il browsing di un database clinico
+
 ---
 
 
